@@ -22,7 +22,7 @@
 <img src="image.jpg">
 <br>
 <h4>No Pose</h4>
-<img src="image1.jpg">
+<img src="image1.png">
 <br>
 <h2>Contact</h2>
 
