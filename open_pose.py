@@ -21,23 +21,23 @@ image_width = 368
 image_height = 368
 threshold = 0.2
 
-# Load the OpenPose model
+# load the OpenPose model
 net = cv.dnn.readNetFromTensorflow("graph_opt.pb")
 
-# Set up camera capture
+# set up camera capture
 cap = cv.VideoCapture(4)
 
-# Create a folder to save annotated images
+# create a folder to save annotated images
 output_folder = "annotated_images"
 os.makedirs(output_folder, exist_ok=True)
 
-# Create a file to store labels
+# create a file to store labels
 label_file_path = "labels.txt"
 
 frame_count = 0
 
 while True:
-    # Capture frame-by-frame
+    # capture frame-by-frame
     ret, img = cap.read()
     if not ret:
         print("Failed to grab frame")
@@ -45,13 +45,13 @@ while True:
 
     photo_height, photo_width = img.shape[:2]
 
-    # Prepare the image for OpenPose
+    # prepare the image for OpenPose
     blob = cv.dnn.blobFromImage(img, 1.0, (image_width, image_height), (127.5, 127.5, 127.5), swapRB=True, crop=False)
     net.setInput(blob)
     out = net.forward()
     out = out[:, :19, :, :]
 
-    # Process the output
+    # process the output
     points = []
     for i in range(len(BODY_PARTS)):
         heatMap = out[0, i, :, :]
@@ -60,10 +60,10 @@ while True:
         y = (photo_height * point[1]) / out.shape[2]
         points.append((int(x), int(y)) if conf > threshold else None)
 
-    # Flag to determine if a pose is drawn
+    # flag to determine if a pose is drawn
     pose_drawn = False
 
-    # Draw the pose pairs
+    # draw the pose pairs
     for pair in POSE_PAIRS:
         partFrom = pair[0]
         partTo = pair[1]
@@ -75,23 +75,23 @@ while True:
             cv.ellipse(img, points[idTo], (3, 3), 0, 0, 360, (0, 0, 255), cv.FILLED)
             pose_drawn = True
 
-    # Display the resulting frame
+    # display the resulting frame
     cv.imshow('Pose Detection', img)
 
-    # Save the annotated frame
+    # save the annotated frame
     frame_filename = os.path.join(output_folder, f"frame_{frame_count:04d}.jpg")
     cv.imwrite(frame_filename, img)
 
-    # Write label to the file
+    # write label to the file
     with open(label_file_path, 'a') as label_file:
         label_file.write(f"{frame_filename}, {'Pose Drawn' if pose_drawn else 'No Pose'}\n")
 
     frame_count += 1
 
-    # Break the loop on 'q' key press
+    # break the loop on 'q' key press
     if cv.waitKey(1) & 0xFF == ord('q'):
         break
 
-# Release the camera and close all windows
+# elease the camera and close all windows
 cap.release()
 cv.destroyAllWindows()
