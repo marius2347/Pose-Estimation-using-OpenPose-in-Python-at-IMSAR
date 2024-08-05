@@ -1,4 +1,4 @@
-<h1> Open Pose Model - DL Python Project</h1>
+<h1> Open Pose Model - IMSAR PROJECT </h1>
 <br>
 <h2>Features</h2>
 <ul>
