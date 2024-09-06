@@ -1,4 +1,4 @@
-<h1> Open Pose Model - IMSAR PROJECT </h1>
+<h1> Pose Estimation using OpenPose in Python at IMSAR </h1>
 <br>
 <h2>Features</h2>
 <ul>
